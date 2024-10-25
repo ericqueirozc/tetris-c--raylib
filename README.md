@@ -1,3 +1,6 @@
+from https://github.com/jalder89/raylib-macos-template-arm-cpp
+
+
 # MacOS Raylib ARM Setup - VS Code C++
 
 After several days of troubleshooting and digging I was finally able to get raylib built and working in VS Code on Apple Silicon Macs. 

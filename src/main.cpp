@@ -20,8 +20,10 @@ int main()
 {
     Color darkBlue = {44, 44, 127, 255};
     // View Viewport;
-    InitWindow(300, 600, "A New Window");
+    InitWindow(500, 620, "A New Window");
     SetTargetFPS(60);
+
+    Font font = LoadFontEx("Font/monogram.ttf", 64, 0, 0);
 
     Game game = Game();
 
@@ -34,6 +36,8 @@ int main()
             game.MoveBlockDown();
         }
         BeginDrawing();
+        DrawTextEx(font, "Score", {365, 15}, 38, 2, WHITE);
+        DrawRectangleRounded({320, 55, 170, 60}, 0.3, 6, );
         ClearBackground(darkBlue);
         game.Draw();
         EndDrawing();

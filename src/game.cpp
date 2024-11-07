@@ -10,6 +10,7 @@ Game::Game()
     blocks = GetAllBlocks();
     currentBlock = GetRandomBlock();
     nextBlock = GetRandomBlock();
+    gameOver = false;
 };
 
 Block Game::GetRandomBlock()
@@ -34,6 +35,12 @@ void Game::HandleInput()
     // cout << "left";
     int keyPressed = GetKeyPressed();
     // cout << "left";
+
+    if (gameOver && keyPressed != 0)
+    {
+        Restart();
+    }
+
     switch (keyPressed)
     {
     case KEY_A:
@@ -62,26 +69,39 @@ void Game::Draw()
 
 void Game::MoveBlockLeft()
 {
-    currentBlock.Move(0, -1);
-    if (IsBlockOutside())
+    if (!gameOver)
     {
-        currentBlock.Move(0, 1);
+
+        currentBlock.Move(0, -1);
+        if (IsBlockOutside() || BlockFits() == false)
+        {
+            currentBlock.Move(0, 1);
+        }
     }
 }
 void Game::MoveBlockRight()
 {
-    currentBlock.Move(0, 1);
-    if (IsBlockOutside())
+    if (!gameOver)
     {
-        currentBlock.Move(0, -1);
+
+        currentBlock.Move(0, 1);
+        if (IsBlockOutside() || BlockFits() == false)
+        {
+            currentBlock.Move(0, -1);
+        }
     }
 }
 void Game::MoveBlockDown()
 {
-    currentBlock.Move(1, 0);
-    if (IsBlockOutside())
+    if (!gameOver)
     {
-        currentBlock.Move(-1, 0);
+
+        currentBlock.Move(1, 0);
+        if (IsBlockOutside() || BlockFits() == false)
+        {
+            currentBlock.Move(-1, 0);
+            LockBlock();
+        }
     }
 }
 
@@ -100,9 +120,53 @@ bool Game::IsBlockOutside()
 
 void Game::RotateBlock()
 {
-    currentBlock.Rotate();
-    if (IsBlockOutside())
+    if (!gameOver)
     {
-        currentBlock.UndoRotation();
+        currentBlock.Rotate();
+        if (IsBlockOutside() || BlockFits() == false)
+        {
+            currentBlock.UndoRotation();
+        }
     }
+}
+
+void Game::LockBlock()
+{
+    std::vector<Position> tiles = currentBlock.GetCellPositions();
+    // deixar marcado no grid a posição do bloco
+    for (Position item : tiles)
+    {
+        grid.grid[item.row][item.col] = currentBlock.id;
+    }
+    // gera o proximo block
+    currentBlock = nextBlock;
+    if (BlockFits() == false)
+    {
+        gameOver = true;
+        return;
+    }
+    nextBlock = GetRandomBlock();
+    grid.ClearFullRows();
+}
+
+void Game::Restart()
+{
+    grid.Initialize();
+    blocks = GetAllBlocks();
+    currentBlock = GetRandomBlock();
+    nextBlock = GetRandomBlock();
+    gameOver = false;
+}
+
+bool Game::BlockFits()
+{
+    std::vector<Position> tiles = currentBlock.GetCellPositions();
+    for (Position item : tiles)
+    {
+        if (grid.IsCellEmpty(item.row, item.col) == false)
+        {
+            return false;
+        }
+    }
+    return true;
 }

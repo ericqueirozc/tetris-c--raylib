@@ -13,7 +13,7 @@ public:
     void Draw();
     bool IsCellOutside(int row, int col);
     bool IsCellEmpty(int row, int col);
-    void ClearFullRows();
+    int ClearFullRows();
     int grid[20][20];
 
 private:

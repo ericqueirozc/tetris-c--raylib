@@ -11,6 +11,7 @@ Game::Game()
     currentBlock = GetRandomBlock();
     nextBlock = GetRandomBlock();
     gameOver = false;
+    score = 0;
 };
 
 Block Game::GetRandomBlock()
@@ -54,6 +55,7 @@ void Game::HandleInput()
         break;
     case KEY_S:
         MoveBlockDown();
+        UpdateScore(0, 1);
         cout << "down";
         break;
     case KEY_W:
@@ -65,6 +67,7 @@ void Game::Draw()
 {
     grid.Draw();
     currentBlock.Draw();
+    nextBlock.DrawNext();
 }
 
 void Game::MoveBlockLeft()
@@ -146,7 +149,8 @@ void Game::LockBlock()
         return;
     }
     nextBlock = GetRandomBlock();
-    grid.ClearFullRows();
+    int rowsCleared = grid.ClearFullRows();
+    UpdateScore(rowsCleared, 0);
 }
 
 void Game::Restart()
@@ -156,6 +160,7 @@ void Game::Restart()
     currentBlock = GetRandomBlock();
     nextBlock = GetRandomBlock();
     gameOver = false;
+    score = 0;
 }
 
 bool Game::BlockFits()
@@ -169,4 +174,25 @@ bool Game::BlockFits()
         }
     }
     return true;
+}
+
+void Game::UpdateScore(int linesCleared, int moveDownPoints)
+{
+    switch (linesCleared)
+    {
+    case 1:
+        score += 100;
+        break;
+    case 2:
+        score += 300;
+        break;
+
+    case 3:
+        score += 500;
+        break;
+
+    default:
+        break;
+    }
+    score += moveDownPoints;
 }

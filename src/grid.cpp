@@ -64,7 +64,7 @@ bool Grid::IsCellEmpty(int row, int col)
     return false;
 }
 
-void Grid::ClearFullRows()
+int Grid::ClearFullRows()
 {
     int completed = 0;
     for (int row = numRows - 1; row >= 0; row--)
@@ -79,6 +79,7 @@ void Grid::ClearFullRows()
             MoveRowDown(row, completed);
         }
     }
+    return completed;
 }
 
 bool Grid::IsRowFull(int row)

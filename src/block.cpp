@@ -18,6 +18,15 @@ void Block::Draw()
     }
 }
 
+void Block::DrawNext()
+{
+    std::vector<Position> tiles = GetCellPositions();
+    for (Position item : tiles)
+    {
+        DrawRectangle(item.col * cellSize + 275, item.row * cellSize + 280, cellSize - 1, cellSize - 1, colors[id]);
+    }
+}
+
 void Block::Move(int rows, int cols)
 {
     rowOffset += rows;
